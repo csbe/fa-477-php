@@ -1,0 +1,109 @@
+<definitions name="HelloService"
+   targetNamespace="http://localhost/ifa/soap/hello/"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://localhost/ifa/soap/hello/HelloService.wsdl"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ 
+	<xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Example" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xs:int" name="alter"/>
+              <xsd:element type="xs:string" name="name"/>
+              <xsd:element type="xs:string" name="email"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType> 
+ 
+	<xsd:complexType name="KeyValueData">
+	      <xsd:sequence>
+	        <xsd:element minOccurs="1" maxOccurs="1" name="id" type="string"/>
+	        <xsd:element minOccurs="1" maxOccurs="1" name="name" type="string"/>
+	        <xsd:element minOccurs="1" maxOccurs="1" name="data" type="string"/>
+	      </xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ArrayOfKeyValueData">
+	    <xsd:sequence>
+	      <xsd:element minOccurs="0" maxOccurs="unbounded"
+	               name="keyval" type="tns:KeyValueData"/>
+	    </xsd:sequence>
+	</xsd:complexType> 
+ 
+   <message name="SayHelloRequest">
+      <part name="firstName" type="xsd:string"/>
+   </message>
+	
+   <message name="SayHelloResponse">
+      <part name="greeting" type="tns:ArrayOfKeyValueData"/>
+   </message>
+
+	<message name="SayVeloRequest">
+      <part name="firstName" type="xsd:string"/>
+   </message>
+	
+   <message name="SayVeloResponse">
+      <part name="example" type="tns:Example"/>
+   </message>   
+   
+
+   <portType name="Hello_PortType">
+      <operation name="sayHello">
+         <input message="tns:SayHelloRequest"/>
+         <output message="tns:SayHelloResponse"/>
+      </operation>
+      <operation name="sayVelo">
+         <input message="tns:SayVeloRequest"/>
+         <output message="tns:SayVeloResponse"/>
+      </operation>
+   </portType>
+
+   <binding name="Hello_Binding" type="tns:Hello_PortType">
+      <soap:binding style="rpc"
+         transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="sayHello">
+         <soap:operation soapAction="sayHello"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               namespace="helloservice"
+               use="encoded"/>
+         </input>
+		
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               namespace="helloservice"
+               use="encoded"/>
+         </output>
+      </operation>
+		<operation name="sayVelo">
+         <soap:operation soapAction="sayVelo"/>
+         <input>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               namespace="helloservice"
+               use="encoded"/>
+         </input>
+		
+         <output>
+            <soap:body
+               encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+               namespace="helloservice"
+               use="encoded"/>
+         </output>
+      </operation>      
+      
+   </binding>
+
+   <service name="HelloService">
+      <documentation>WSDL File for HelloService</documentation>
+      <port binding="tns:Hello_Binding" name="Hello_Port">
+         <soap:address
+            location="http://localhost/ifa/soap/hello/HelloService.php" />
+      </port>
+   </service>
+</definitions>
